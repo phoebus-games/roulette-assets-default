@@ -10,4 +10,5 @@ jobs:
       - store_artifacts:
           path: assets.tar.gz
           destination: assets.tar.gz
-      - run: "curl -fv -u $CIRCLE_TOKEN: -X POST -d '{\"build_parameters\": {\"COMPONENT\": \"roulette-assets-default\"}}' -H 'Content-Type: application/json' https://circleci.com/api/v1.1/project/github/phoebus-games/deploy-assets/tree/master"
+      - run: "export ARTIFACT=$(curl -f -u $CIRCLE_TOKEN: https://circleci.com/api/v1.1/project/github/phoebus-games/$COMPONENT/$COMPONENT_BUILD_NUM/artifacts|jq '.[] | .url')"
+      - run: "curl -fv -u $CIRCLE_TOKEN: -X POST -d \"{'build_parameters': {'ARTIFACT': '$ARTIFACT'}}\" -H 'Content-Type: application/json' https://circleci.com/api/v1.1/project/github/phoebus-games/deploy-assets/tree/master"

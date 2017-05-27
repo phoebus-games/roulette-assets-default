@@ -12,4 +12,5 @@ jobs:
           destination: assets.tar.gz
       - run: "export ARTIFACT=$(curl -f -u $CIRCLE_TOKEN: https://circleci.com/api/v1.1/project/github/phoebus-games/$COMPONENT/$COMPONENT_BUILD_NUM/artifacts|jq '.[] | .url')"
       - run: "echo {\"build_parameters\": {\"ARTIFACT\": \"$ARTIFACT\"}} > post"
+      - run: cat post
       - run: "curl -fv -u $CIRCLE_TOKEN: -X POST -d @post -H 'Content-Type: application/json' https://circleci.com/api/v1.1/project/github/phoebus-games/deploy-assets/tree/master"

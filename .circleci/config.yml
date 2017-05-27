@@ -6,7 +6,8 @@ jobs:
       - image: "circleci/openjdk:8"
     steps:
       - checkout
+      - run: tar zcvf assets.tar.gz assets
       - store_artifacts:
-          path: assets
-          destination: assets
+          path: assets.tar.gz
+          destination: .
       #- run: "curl -fv -u $CIRCLE_TOKEN: -X POST -d '{\"build_parameters\": {\"COMPONENT\": \"roulette\"}}' -H 'Content-Type: application/json' https://circleci.com/api/v1.1/project/github/phoebus-games/deploy-assets/tree/master"

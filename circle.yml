@@ -1,0 +1,16 @@
+dependencies:
+  override:
+  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+  - chmod +x kubectl
+  - sudo apt-get -y install gnupg
+compile:
+  override:
+  - echo $GPG_KEY | gpg -d --passphrase-fd 0  --batch --yes kubeconfig.gpg > kubeconfig
+test:
+  override:
+    - "true"
+deployment:
+  prod:
+    branch: master
+    commands:
+      - env KUBECONFIG=kubeconfig PATH=$PATH:. kubectl cp assets $(kubectl get pods -l app=web -o name|cut -c 6-):/usr/share/nginx/html/assets
